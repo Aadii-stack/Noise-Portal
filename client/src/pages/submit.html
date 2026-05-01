@@ -12,7 +12,7 @@
 
 <div class="section-title title-card">
   <h1 data-i18n="submitReport">Submit Report</h1>
-  <p>Upload evidence, select the incident location, and submit anonymously or with optional contact details.</p>
+  <p>Upload evidence, select the incident location, and provide your contact details for follow-up.</p>
 </div>
 
 <form class="two-column-form" id="reportForm">
@@ -84,16 +84,16 @@
       </div>
     </div>
 
-    <!-- Optional description -->
+    <!-- Required description -->
     <div class="field">
-      <label for="description">Description</label>
-      <textarea id="description" placeholder="Optional details such as vehicle number, landmark, or recurring timing"></textarea>
+      <label for="description">Description <span class="required-mark">*</span></label>
+      <textarea id="description" placeholder="Provide details such as vehicle number, landmark, or recurring timing" required></textarea>
     </div>
 
-    <!-- Contact (optional — blank = anonymous report) -->
+    <!-- Contact (Required) -->
     <div class="field">
-      <label for="citizenContact">Contact details <span class="optional-text">(optional)</span></label>
-      <input id="citizenContact" type="text" placeholder="Email or phone number" />
+      <label for="citizenContact">Contact details <span class="required-mark">*</span></label>
+      <input id="citizenContact" type="text" placeholder="Email or phone number" required />
     </div>
 
     <button class="primary-button full-width" id="submitReportButton" type="submit" data-i18n="submit">Submit Report</button>

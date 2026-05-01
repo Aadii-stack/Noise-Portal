@@ -174,15 +174,27 @@ async function uploadVideo(file) {
 /* ── Form Submission ── */
 
 /**
- * Collect all form data, upload the video, then POST
- * the report payload to the backend.
- * If citizenContact is empty, the report is treated as anonymous.
+ *  Collect all form data, upload the video, then POST
+ *  the report payload to the backend.
  */
-async function submitReport(event) {
+ async function submitReport(event) {
   event.preventDefault();
 
   if (!selectedVideo) {
     showToast('Please upload a video evidence file.', 'error');
+    return;
+  }
+
+  const description = $('#description').value.trim();
+  const citizenContact = $('#citizenContact').value.trim();
+
+  if (description.length < 5) {
+    showToast('Description must be at least 5 characters long.', 'error');
+    return;
+  }
+
+  if (!citizenContact) {
+    showToast('Contact details are required.', 'error');
     return;
   }
 

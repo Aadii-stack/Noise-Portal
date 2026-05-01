@@ -19,8 +19,8 @@ router.post(
     body('noiseLevel').isInt({ min: 30, max: 120 }),
     body('location.latitude').isFloat({ min: -90, max: 90 }),
     body('location.longitude').isFloat({ min: -180, max: 180 }),
-    body('description').optional().isLength({ max: 1000 }),
-    body('citizenContact').optional().isLength({ max: 120 })
+    body('description').isLength({ min: 5, max: 1000 }).withMessage('Description must be at least 5 characters long'),
+    body('citizenContact').isLength({ min: 3, max: 120 }).withMessage('Contact details are required')
   ],
   async (req, res, next) => {
     try {
