@@ -14,7 +14,20 @@ import { initSupabase } from './services/supabase.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const app = express();
-const port = process.env.PORT || 5001;
+const port = Number(process.env.PORT || 5001);
+const host = process.env.HOST || '127.0.0.1';
+
+const allowedOrigins = new Set(
+  [
+    'http://127.0.0.1:5173',
+    'http://localhost:5173',
+    ...(process.env.CLIENT_ORIGIN || '')
+      .split(',')
+      .map((origin) => origin.trim())
+      .filter(Boolean),
+    process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : ''
+  ].filter(Boolean)
+);
 
 initDatabase();
 initSupabase();
@@ -26,7 +39,14 @@ app.use(
 );
 app.use(
   cors({
-    origin: process.env.CLIENT_ORIGIN || 'http://127.0.0.1:5173',
+    origin(origin, callback) {
+      if (!origin || allowedOrigins.has(origin)) {
+        callback(null, true);
+        return;
+      }
+
+      callback(new Error(`Not allowed by CORS: ${origin}`));
+    },
     credentials: true
   })
 );
@@ -50,10 +70,19 @@ app.use('/api/upload', submissionLimiter, uploadRoutes);
 
 app.use((err, _req, res, _next) => {
   const message = err.message || 'Server error';
-  const status = message.includes('Only MP4') ? 400 : 500;
+  const status = err.status || err.statusCode || (message.includes('Only MP4') ? 400 : 500);
   res.status(status).json({ message });
 });
 
-app.listen(port, '127.0.0.1', () => {
-  console.log(`Noise portal API running on http://127.0.0.1:${port}`);
-});
+export function startServer() {
+  return app.listen(port, host, () => {
+    console.log(`Noise portal API running on http://${host}:${port}`);
+  });
+}
+
+if (process.argv[1] && path.resolve(process.argv[1]) === __filename) {
+  startServer();
+}
+
+export { app };
+export default app;

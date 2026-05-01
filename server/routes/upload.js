@@ -1,61 +1,70 @@
 import express from 'express';
-import multer from 'multer';
 import path from 'path';
 import { nanoid } from 'nanoid';
-import { fileURLToPath } from 'url';
 import { getSupabase, getVideosBucket } from '../services/supabase.js';
 
 const router = express.Router();
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 const allowedMimeTypes = new Set(['video/mp4', 'video/quicktime', 'video/x-msvideo']);
+const allowedExtensions = new Set(['.mp4', '.mov', '.avi']);
 const maxSize = 100 * 1024 * 1024;
+const cacheControl = '3600';
 
-const upload = multer({
-  storage: multer.memoryStorage(),
-  limits: { fileSize: maxSize },
-  fileFilter: (_req, file, cb) => {
-    if (!allowedMimeTypes.has(file.mimetype)) {
-      return cb(new Error('Only MP4, MOV, and AVI videos are allowed.'));
-    }
-    return cb(null, true);
+function resolveVideoExtension(fileName, mimeType) {
+  const extension = path.extname(path.basename(fileName || '')).toLowerCase();
+
+  if (allowedExtensions.has(extension)) {
+    return extension;
   }
-});
 
-router.post('/video', upload.single('video'), async (req, res, next) => {
+  if (mimeType === 'video/quicktime') {
+    return '.mov';
+  }
+
+  if (mimeType === 'video/x-msvideo') {
+    return '.avi';
+  }
+
+  return '.mp4';
+}
+
+router.post('/video', async (req, res, next) => {
   try {
-    if (!req.file) {
-      return res.status(400).json({ message: 'Video file is required' });
+    const { fileName, mimeType, size } = req.body ?? {};
+
+    if (!fileName || !mimeType) {
+      return res.status(400).json({ message: 'Video file metadata is required.' });
     }
 
-    const extension = path.extname(req.file.originalname) || '.mp4';
-    const fileName = `${Date.now()}-${nanoid(8)}${extension}`;
-    const supabase = getSupabase();
-
-    if (supabase) {
-      const storagePath = `noise-reports/${fileName}`;
-      const { error: uploadError } = await supabase.storage.from(getVideosBucket()).upload(storagePath, req.file.buffer, {
-        contentType: req.file.mimetype,
-        upsert: false
-      });
-      if (uploadError) throw uploadError;
-
-      const { data } = supabase.storage.from(getVideosBucket()).getPublicUrl(storagePath);
-      const videoUrl = data.publicUrl;
-      return res.status(201).json({ videoUrl, storagePath });
+    if (!allowedMimeTypes.has(mimeType)) {
+      return res.status(400).json({ message: 'Only MP4, MOV, and AVI videos are allowed.' });
     }
 
-    const localPath = path.join(__dirname, '..', 'uploads', fileName);
-    const { writeFile } = await import('fs/promises');
-    await writeFile(localPath, req.file.buffer);
-    return res.status(201).json({
-      videoUrl: `${req.protocol}://${req.get('host')}/uploads/${fileName}`,
-      storagePath: `local/uploads/${fileName}`
-    });
-  } catch (error) {
-    if (error instanceof multer.MulterError && error.code === 'LIMIT_FILE_SIZE') {
+    if (typeof size === 'number' && size > maxSize) {
       return res.status(400).json({ message: 'Video must be 100MB or smaller.' });
     }
+
+    const supabase = getSupabase();
+    if (!supabase) {
+      return res.status(503).json({ message: 'Supabase storage must be configured for video uploads.' });
+    }
+
+    const storagePath = `noise-reports/${Date.now()}-${nanoid(8)}${resolveVideoExtension(fileName, mimeType)}`;
+    const bucket = getVideosBucket();
+    const { data, error } = await supabase.storage.from(bucket).createSignedUploadUrl(storagePath);
+
+    if (error) {
+      throw error;
+    }
+
+    return res.status(201).json({
+      videoUrl: supabase.storage.from(bucket).getPublicUrl(storagePath).data.publicUrl,
+      storagePath,
+      signedUrl: data.signedUrl,
+      token: data.token,
+      cacheControl,
+      upsert: false
+    });
+  } catch (error) {
     return next(error);
   }
 });

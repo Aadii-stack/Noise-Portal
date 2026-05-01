@@ -11,7 +11,7 @@
  */
 
 import L from 'leaflet';
-import { $, API_URL, request, showToast } from './utils.js';
+import { $, request, showToast } from './utils.js';
 import { t } from './i18n.js';
 import { MUMBAI, markerIcon } from './map.js';
 
@@ -19,6 +19,7 @@ import { MUMBAI, markerIcon } from './map.js';
 const MAX_VIDEO_SIZE = 100 * 1024 * 1024; // 100 MB
 const ALLOWED_VIDEO_TYPES = ['video/mp4', 'video/quicktime', 'video/x-msvideo'];
 const ALLOWED_VIDEO_EXTENSIONS = ['mp4', 'mov', 'avi'];
+const DEFAULT_CACHE_CONTROL = '3600';
 
 /* ── Module state ── */
 let selectedVideo = null; // File object chosen by the citizen
@@ -114,20 +115,34 @@ function setSelectedVideo(file) {
 /* ── Video Upload ── */
 
 /**
- * Upload the video file to the server with progress tracking.
- * Uses XMLHttpRequest instead of fetch() because XHR provides
- * upload.onprogress events to update the progress bar.
+ * Ask the backend for a signed Supabase upload URL, then stream the
+ * file directly to storage with progress tracking.
  *
  * @param {File} file - Video file to upload
  * @returns {Promise<{videoUrl: string, storagePath: string}>}
  */
-function uploadVideo(file) {
-  return new Promise((resolve, reject) => {
+async function uploadVideo(file) {
+  const uploadSession = await request('/api/upload/video', {
+    method: 'POST',
+    body: JSON.stringify({
+      fileName: file.name,
+      mimeType: file.type,
+      size: file.size
+    })
+  });
+
+  if (!uploadSession?.signedUrl) {
+    throw new Error('Upload session could not be created.');
+  }
+
+  return await new Promise((resolve, reject) => {
     const formData = new FormData();
-    formData.append('video', file);
+    formData.append('cacheControl', uploadSession.cacheControl || DEFAULT_CACHE_CONTROL);
+    formData.append('', file, file.name);
 
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', `${API_URL}/api/upload/video`);
+    xhr.open('PUT', uploadSession.signedUrl);
+    xhr.setRequestHeader('x-upsert', String(Boolean(uploadSession.upsert)));
 
     // Update progress bar as chunks are sent
     xhr.upload.onprogress = (event) => {
@@ -139,9 +154,16 @@ function uploadVideo(file) {
     };
 
     xhr.onload = () => {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        resolve({
+          videoUrl: uploadSession.videoUrl,
+          storagePath: uploadSession.storagePath
+        });
+        return;
+      }
+
       const body = JSON.parse(xhr.responseText || '{}');
-      if (xhr.status >= 200 && xhr.status < 300) resolve(body);
-      else reject(new Error(body.message || 'Upload failed'));
+      reject(new Error(body.message || body.error || 'Upload failed'));
     };
 
     xhr.onerror = () => reject(new Error('Upload failed'));
@@ -169,7 +191,7 @@ async function submitReport(event) {
   submitButton.textContent = 'Submitting...';
 
   try {
-    // Step 1: Upload the video file
+    // Step 1: Get a signed upload session and stream the file to Supabase
     const uploadResult = await uploadVideo(selectedVideo);
 
     // Step 2: Build the report payload
@@ -204,6 +226,9 @@ async function submitReport(event) {
   } catch (error) {
     showToast(error.message, 'error');
   } finally {
+    $('#uploadProgressWrap').classList.add('hidden');
+    $('#uploadProgressBar').style.width = '0%';
+    $('#uploadProgressText').textContent = '0%';
     submitButton.disabled = false;
     submitButton.textContent = t('submit');
   }
