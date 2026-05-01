@@ -1,0 +1,161 @@
+/**
+ * ──────────────────────────────────────────────
+ *  dashboard.css — Authority dashboard + table + modal
+ * ──────────────────────────────────────────────
+ */
+
+/* ═══ Login Card ═══ */
+
+.auth-card {
+  width: min(440px, 100%);
+  margin: 22px auto;
+  padding: 26px;
+}
+
+/* ═══ Dashboard Grid ═══ */
+
+.dashboard {
+  display: grid;
+  gap: 20px;
+}
+
+/* ═══ Reports Table ═══ */
+
+.table-panel {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  min-width: 820px;
+  border-collapse: separate;
+  border-spacing: 0;
+  text-align: left;
+}
+
+th {
+  color: var(--deep-navy);
+  background: #f1f7ff;
+}
+
+th,
+td {
+  padding: 12px 14px;
+  border-bottom: 1px solid #e5eefc;
+  vertical-align: top;
+}
+
+tbody tr:hover {
+  background: #f8fbff;
+}
+
+/* ═══ Status Badges ═══ */
+
+.status-badge {
+  display: inline-block;
+  padding: 5px 8px;
+  border-radius: 999px;
+  background: #fef3c7;
+  color: #92400e;
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.status-badge.review {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.status-badge.done {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status-badge.rejected {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.empty-state {
+  color: var(--muted);
+}
+
+/* ═══ Report Detail Modal ═══ */
+
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  padding: 24px;
+  overflow: auto;
+  background: rgba(15, 23, 42, 0.65);
+}
+
+.modal-card {
+  width: min(1000px, 100%);
+  margin: 0 auto;
+  border-radius: 16px;
+  background: white;
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.28);
+  overflow: hidden;
+}
+
+.modal-header {
+  padding: 18px;
+  border-bottom: 1px solid var(--border);
+}
+
+.modal-header h2,
+.modal-header p {
+  margin: 0;
+}
+
+.modal-body {
+  display: grid;
+  grid-template-columns: 1fr 0.9fr;
+  gap: 20px;
+  padding: 18px;
+  max-height: calc(100vh - 150px);
+  overflow: auto;
+}
+
+/* Prevent Leaflet maps from pushing outside the modal */
+.modal-media,
+.modal-details {
+  min-width: 0;
+}
+
+.modal-media video {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 8px;
+  background: black;
+}
+
+/* Tighter map dimensions inside the modal */
+.modal-media .map-box {
+  width: 100%;
+  min-height: 260px;
+  height: 280px;
+  max-height: 300px;
+  margin-bottom: 0;
+}
+
+/* ═══ Detail Items (read-only label + value pairs) ═══ */
+
+.detail-item {
+  margin-bottom: 14px;
+}
+
+.detail-item span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.detail-item strong {
+  display: block;
+  margin-top: 3px;
+}

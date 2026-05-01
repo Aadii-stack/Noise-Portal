@@ -1,0 +1,51 @@
+/**
+ * ──────────────────────────────────────────────
+ *  responsive.css — Mobile breakpoints
+ * ──────────────────────────────────────────────
+ *
+ *  ≤ 900px  → Stack columns, simplify grids
+ *  ≤ 620px  → Single column everything, tighter padding
+ */
+
+@media (max-width: 900px) {
+  .site-header,
+  .dashboard-header,
+  .panel-header,
+  .modal-header {
+    flex-direction: column;
+  }
+
+  .hero-section.active,
+  .two-column-form,
+  .modal-body {
+    grid-template-columns: 1fr;
+  }
+
+  .filters,
+  .stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 620px) {
+  .content-section {
+    width: min(100% - 20px, 1180px);
+    padding: 20px 0;
+  }
+
+  .form-grid,
+  .filters,
+  .stats-grid,
+  .inline-row {
+    grid-template-columns: 1fr;
+  }
+
+  .site-header {
+    padding: 10px;
+  }
+
+  .nav-button,
+  .outline-button {
+    padding: 9px 10px;
+  }
+}

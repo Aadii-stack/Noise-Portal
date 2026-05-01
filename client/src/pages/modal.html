@@ -1,0 +1,30 @@
+<!--
+  ═══════════════════════════════════════════════
+    REPORT DETAIL MODAL
+  ═══════════════════════════════════════════════
+  Opens when an officer clicks "View" on a report row.
+  Contains:
+    Left  → Video player + location map
+    Right → Report details + editable status/officer/notes
+
+  All content is filled dynamically by dashboard.js.
+-->
+
+<div class="modal-card">
+  <div class="modal-header">
+    <div>
+      <h2 id="modalTitle">Report Details</h2>
+      <p id="modalTime"></p>
+    </div>
+    <button class="icon-button" id="closeModal" type="button" aria-label="Close modal">X</button>
+  </div>
+  <div class="modal-body">
+    <!-- Left: video evidence + location map -->
+    <div class="modal-media">
+      <video id="modalVideo" controls></video>
+      <div class="map-box" id="modalMap" aria-label="Single report map"></div>
+    </div>
+    <!-- Right: report details (populated by JS) -->
+    <div class="modal-details" id="modalDetails"></div>
+  </div>
+</div>

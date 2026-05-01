@@ -1,0 +1,22 @@
+/**
+ * ──────────────────────────────────────────────
+ *  styles.css — Master stylesheet (import barrel)
+ * ──────────────────────────────────────────────
+ *
+ *  Imports all CSS modules in the correct order:
+ *    1. base        → tokens, reset, global styles
+ *    2. layout      → header, nav, page containers
+ *    3. components  → buttons, forms, panels, maps, toasts
+ *    4. home        → hero / landing page
+ *    5. dashboard   → authority dashboard, table, modal
+ *    6. stats       → public statistics cards
+ *    7. responsive  → mobile breakpoints
+ */
+
+@import './css/base.css';
+@import './css/layout.css';
+@import './css/components.css';
+@import './css/home.css';
+@import './css/dashboard.css';
+@import './css/stats.css';
+@import './css/responsive.css';

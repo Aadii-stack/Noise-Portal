@@ -1,0 +1,25 @@
+# ── Dependencies ──
+node_modules/
+
+# ── Build output ──
+dist/
+
+# ── Environment files (contain secrets — set via hosting dashboard) ──
+.env
+.env.*
+!.env.example
+
+# ── Uploaded files (user data) ──
+server/uploads/*
+!server/uploads/.gitkeep
+
+# ── Logs ──
+*.log
+
+# ── OS files ──
+.DS_Store
+Thumbs.db
+
+# ── Editor ──
+.vscode/
+.idea/

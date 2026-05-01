@@ -1,0 +1,121 @@
+/**
+ * ──────────────────────────────────────────────
+ *  layout.css — Header, navigation, and page containers
+ * ──────────────────────────────────────────────
+ */
+
+/* ── Sticky header ── */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px max(18px, calc((100vw - 1180px) / 2));
+  border-bottom: 1px solid rgba(215, 227, 247, 0.9);
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(10px);
+}
+
+/* ── Brand / logo button ── */
+.brand-button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 0;
+  background: transparent;
+  color: var(--deep-navy);
+  text-align: left;
+}
+
+.brand-mark {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, var(--deep-navy), var(--navy));
+  color: white;
+  font-weight: 800;
+  box-shadow: var(--soft-shadow);
+}
+
+.brand-button small {
+  display: block;
+  margin-top: 2px;
+  color: var(--muted);
+}
+
+/* ── Flex row helpers (nav, header actions, button rows) ── */
+.header-actions,
+.main-nav,
+.button-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* ── Pill-style navigation bar ── */
+.main-nav {
+  padding: 4px;
+  border: 1px solid #dbeafe;
+  border-radius: 999px;
+  background: #f8fbff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+/* ── Page switching ── */
+.page {
+  display: none;
+}
+
+.page.active {
+  display: block;
+}
+
+/* ── Centred content area ── */
+.content-section {
+  width: min(1180px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 28px 0 40px;
+}
+
+/* ── Section header card ── */
+.section-title {
+  margin-bottom: 22px;
+}
+
+.title-card {
+  padding: 18px 20px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: var(--soft-shadow);
+}
+
+.section-title h1,
+.dashboard-header h1,
+.auth-card h1 {
+  margin: 0;
+  color: var(--deep-navy);
+}
+
+.section-title p,
+.dashboard-header p,
+.panel-header p,
+.auth-card p {
+  margin: 6px 0 0;
+  color: var(--muted);
+}
+
+/* ── Flex header rows (panel, dashboard, modal) ── */
+.panel-header,
+.dashboard-header,
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-start;
+}

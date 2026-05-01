@@ -1,0 +1,323 @@
+/**
+ * ──────────────────────────────────────────────
+ *  components.css — Reusable UI components
+ * ──────────────────────────────────────────────
+ *
+ *  Buttons, panels, form fields, upload area,
+ *  progress bar, and map containers.
+ */
+
+/* ═══ Buttons ═══ */
+
+.nav-button,
+.outline-button,
+.primary-button,
+.icon-button {
+  border-radius: 999px;
+  font-weight: 700;
+}
+
+.nav-button {
+  border: 0;
+  padding: 9px 13px;
+  color: var(--navy);
+  background: transparent;
+}
+
+.nav-button.active {
+  color: white;
+  background: linear-gradient(135deg, var(--deep-navy), var(--navy));
+  box-shadow: var(--soft-shadow);
+}
+
+.outline-button {
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  color: var(--navy);
+  background: white;
+  box-shadow: 0 1px 0 rgba(15, 23, 42, 0.03);
+}
+
+.outline-button:hover {
+  border-color: #93c5fd;
+  background: #eff6ff;
+}
+
+.outline-button.danger {
+  border-color: #fecaca;
+  color: var(--danger);
+}
+
+.primary-button {
+  padding: 12px 18px;
+  border: 0;
+  color: white;
+  background: linear-gradient(135deg, var(--deep-navy), var(--navy));
+  box-shadow: var(--soft-shadow);
+}
+
+.primary-button:hover {
+  box-shadow: 0 14px 28px rgba(30, 58, 138, 0.2);
+}
+
+.full-width {
+  width: 100%;
+}
+
+.icon-button {
+  width: 38px;
+  height: 38px;
+  border: 0;
+  color: #475569;
+  background: #f1f5f9;
+}
+
+/* ═══ Panels / Cards ═══ */
+
+.panel,
+.auth-card,
+.stat-card {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--card-bg);
+  box-shadow: var(--shadow);
+}
+
+.panel {
+  padding: 22px;
+}
+
+.panel-title {
+  margin: 0 0 16px;
+  color: var(--deep-navy);
+  font-size: 1.05rem;
+}
+
+/* ═══ Form Fields ═══ */
+
+.two-column-form {
+  display: grid;
+  grid-template-columns: 1fr 0.95fr;
+  gap: 22px;
+}
+
+.form-grid,
+.filters {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.filters {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.field {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 15px;
+}
+
+.field label {
+  color: #334155;
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+.optional-text {
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  border: 1px solid #d2dceb;
+  border-radius: 10px;
+  padding: 11px 12px;
+  background: #fbfdff;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .field input,
+  .field select,
+  .field textarea {
+    transition: none;
+  }
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  border-color: #60a5fa;
+  background: white;
+  box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.14);
+}
+
+.field textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+.inline-row {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+/* ═══ Upload Area ═══ */
+
+.upload-box {
+  padding: 18px;
+  border: 2px dashed var(--border);
+  border-radius: 14px;
+  background: linear-gradient(180deg, #ffffff, #f8fbff);
+}
+
+.upload-box.dragging {
+  border-color: var(--navy);
+  background: #eff6ff;
+}
+
+.upload-button {
+  display: grid;
+  place-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 150px;
+  border: 0;
+  background: transparent;
+  color: var(--deep-navy);
+}
+
+.upload-button::before {
+  content: "+";
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  color: white;
+  background: var(--navy);
+  font-size: 1.7rem;
+  line-height: 1;
+}
+
+.upload-button span {
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.selected-file {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ═══ Progress Bar ═══ */
+
+.progress {
+  margin-top: 14px;
+}
+
+.progress-label {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  color: #475569;
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+.progress-track {
+  height: 12px;
+  border-radius: 999px;
+  background: var(--light-blue);
+  overflow: hidden;
+}
+
+.progress-bar {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, var(--navy), var(--green));
+  transition: width 0.2s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .progress-bar {
+    transition: none;
+  }
+}
+
+.success-box {
+  margin-top: 16px;
+  padding: 12px;
+  border: 1px solid #bbf7d0;
+  border-radius: 6px;
+  color: var(--success);
+  background: #f0fdf4;
+  font-weight: 700;
+}
+
+/* ═══ Map Containers ═══ */
+
+.map-box {
+  min-height: 320px;
+  height: 320px;
+  margin: 14px 0;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  background: #e2e8f0;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.55);
+}
+
+.dashboard-map-box {
+  height: 340px;
+  min-height: 340px;
+  max-height: 340px;
+  margin-bottom: 0;
+  position: relative;
+}
+
+.leaflet-container {
+  max-width: 100%;
+}
+
+.map-pin {
+  width: 18px;
+  height: 18px;
+  border: 3px solid white;
+  border-radius: 999px;
+  background: var(--navy);
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.35);
+}
+
+/* ═══ Toast Notifications ═══ */
+
+.toast {
+  position: fixed;
+  top: 82px;
+  right: 18px;
+  z-index: 120;
+  max-width: 360px;
+  padding: 13px 15px;
+  border-radius: 12px;
+  color: white;
+  background: var(--deep-navy);
+  box-shadow: var(--shadow);
+  font-weight: 700;
+}
+
+.toast.error {
+  background: var(--danger);
+}
+
+.toast.success {
+  background: var(--success);
+}

@@ -1,0 +1,36 @@
+/**
+ * ──────────────────────────────────────────────
+ *  stats.css — Public statistics page styles
+ * ──────────────────────────────────────────────
+ */
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.stat-card {
+  padding: 20px;
+  border-top: 4px solid var(--navy);
+}
+
+.stat-card span {
+  display: block;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.stat-card strong {
+  display: block;
+  margin: 8px 0 14px;
+  color: var(--deep-navy);
+  font-size: 2rem;
+}
+
+/* Bar chart fill — controlled by --bar CSS variable */
+.stat-card div {
+  height: 9px;
+  border-radius: 999px;
+  background: linear-gradient(to right, var(--gold) var(--bar), #e2e8f0 var(--bar));
+}

@@ -1,0 +1,134 @@
+<!--
+  ═══════════════════════════════════════════════
+    SUBMIT REPORT PAGE — Citizen report form
+  ═══════════════════════════════════════════════
+  Two-column layout:
+    Left  → Evidence details (video, dropdowns, description)
+    Right → Incident location (interactive Leaflet map + GPS)
+
+  All input IDs are read by report.js to build the API payload.
+  If citizenContact is left blank, the report is anonymous.
+-->
+
+<div class="section-title title-card">
+  <h1 data-i18n="submitReport">Submit Report</h1>
+  <p>Upload evidence, select the incident location, and submit anonymously or with optional contact details.</p>
+</div>
+
+<form class="two-column-form" id="reportForm">
+
+  <!-- ═══ LEFT COLUMN: Evidence Details ═══ -->
+  <section class="panel">
+    <h2 class="panel-title">Evidence Details</h2>
+
+    <!-- Video upload — supports drag-and-drop or file picker -->
+    <div class="field">
+      <label>Video evidence</label>
+      <div class="upload-box" id="dropZone">
+        <input id="videoInput" type="file" accept=".mp4,.mov,.avi,video/mp4,video/quicktime,video/x-msvideo" hidden />
+        <button class="upload-button" id="browseVideo" type="button">
+          <strong>Drag and drop video, or browse</strong>
+          <span>MP4, MOV, AVI. Maximum 100MB.</span>
+        </button>
+        <!-- Shown after a file is selected -->
+        <div class="selected-file hidden" id="selectedVideo">
+          <span id="selectedVideoName"></span>
+          <button class="outline-button danger" id="removeVideo" type="button">Remove</button>
+        </div>
+        <!-- Upload progress bar (visible during upload) -->
+        <div class="progress hidden" id="uploadProgressWrap" aria-live="polite">
+          <div class="progress-label">
+            <span>Upload progress</span>
+            <span id="uploadProgressText">0%</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-bar" id="uploadProgressBar"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Incident classification dropdowns -->
+    <div class="form-grid">
+      <div class="field">
+        <label for="vehicleType">Vehicle type</label>
+        <select id="vehicleType">
+          <option>Car</option>
+          <option>Motorcycle</option>
+          <option>Truck</option>
+          <option>Auto-rickshaw</option>
+          <option>Construction vehicle</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="violationType">Violation type</label>
+        <select id="violationType">
+          <option>Excessive honking</option>
+          <option>Loud music</option>
+          <option>Construction noise</option>
+          <option>Vehicle revving</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="zoneType">Zone type</label>
+        <select id="zoneType">
+          <option>Residential</option>
+          <option>Silent zone - Hospital</option>
+          <option>Silent zone - School</option>
+          <option>Commercial</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="noiseLevel">Noise level: <span id="noiseLevelText">75</span> dB</label>
+        <input id="noiseLevel" type="range" min="30" max="120" value="75" />
+      </div>
+    </div>
+
+    <!-- Optional description -->
+    <div class="field">
+      <label for="description">Description</label>
+      <textarea id="description" placeholder="Optional details such as vehicle number, landmark, or recurring timing"></textarea>
+    </div>
+
+    <!-- Contact (optional — blank = anonymous report) -->
+    <div class="field">
+      <label for="citizenContact">Contact details <span class="optional-text">(optional)</span></label>
+      <input id="citizenContact" type="text" placeholder="Email or phone number" />
+    </div>
+
+    <button class="primary-button full-width" id="submitReportButton" type="submit" data-i18n="submit">Submit Report</button>
+
+    <!-- Success message shown after submission -->
+    <div class="success-box hidden" id="successBox"></div>
+  </section>
+
+  <!-- ═══ RIGHT COLUMN: Incident Location ═══ -->
+  <section class="panel">
+    <div class="panel-header">
+      <div>
+        <h2>Incident Location</h2>
+        <p>Click the map or use browser GPS.</p>
+      </div>
+      <button class="outline-button" id="useGps" type="button" data-i18n="currentLocation">Use Current Location</button>
+    </div>
+
+    <!-- Interactive Leaflet map — citizen clicks to place a pin -->
+    <div class="map-box" id="reportMap" aria-label="Incident location map"></div>
+
+    <!-- Latitude / Longitude fields (auto-filled by map click or GPS) -->
+    <div class="form-grid">
+      <div class="field">
+        <label for="latitude">Latitude</label>
+        <input id="latitude" type="number" step="any" value="19.076" />
+      </div>
+      <div class="field">
+        <label for="longitude">Longitude</label>
+        <input id="longitude" type="number" step="any" value="72.8777" />
+      </div>
+    </div>
+    <div class="field">
+      <label for="address">Address or landmark</label>
+      <input id="address" type="text" value="Mumbai, Maharashtra" placeholder="Nearest street, junction, school, hospital, or landmark" />
+    </div>
+  </section>
+</form>

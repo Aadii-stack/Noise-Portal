@@ -1,0 +1,107 @@
+<!--
+  ═══════════════════════════════════════════════
+    AUTHORITY DASHBOARD PAGE — Officer view
+  ═══════════════════════════════════════════════
+  Protected by JWT. Officers log in with credentials
+  defined in server/.env, then see:
+    • Filter bar (status, violation, zone, date range)
+    • Reports table with View buttons
+    • Export to CSV / PDF
+
+  All logic handled by dashboard.js.
+-->
+
+<!-- Login panel (shown when not authenticated) -->
+<section class="auth-card" id="loginPanel">
+  <h1>Authority Login</h1>
+  <p>Use officer credentials to review reports.</p>
+  <form id="loginForm">
+    <div class="field">
+      <label for="loginEmail">Email</label>
+      <input id="loginEmail" type="email" placeholder="Officer email from server/.env" />
+    </div>
+    <div class="field">
+      <label for="loginPassword">Password</label>
+      <input id="loginPassword" type="password" placeholder="Officer password from server/.env" />
+    </div>
+    <button class="primary-button full-width" type="submit">Login</button>
+  </form>
+</section>
+
+<!-- Dashboard panel (shown after successful login) -->
+<section class="dashboard hidden" id="dashboardPanel">
+
+  <!-- Header with title + action buttons -->
+  <div class="dashboard-header title-card">
+    <div>
+      <h1>Authority Dashboard</h1>
+      <p>Review submissions, update status, assign officers, and export records.</p>
+    </div>
+    <div class="button-row">
+      <button class="outline-button" id="refreshReports" type="button">Refresh</button>
+      <button class="outline-button" id="exportCsv" type="button">CSV</button>
+      <button class="outline-button" id="exportPdf" type="button">PDF</button>
+      <button class="outline-button danger" id="logoutButton" type="button">Logout</button>
+    </div>
+  </div>
+
+  <!-- Filter bar — changes trigger a fresh API fetch -->
+  <div class="filters panel">
+    <div class="field">
+      <label for="filterStatus">Status</label>
+      <select id="filterStatus">
+        <option value="">All</option>
+        <option>Pending</option>
+        <option>Under Review</option>
+        <option>Action Taken</option>
+        <option>Rejected</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="filterViolation">Violation</label>
+      <select id="filterViolation">
+        <option value="">All</option>
+        <option>Excessive honking</option>
+        <option>Loud music</option>
+        <option>Construction noise</option>
+        <option>Vehicle revving</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="filterZone">Zone</label>
+      <select id="filterZone">
+        <option value="">All</option>
+        <option>Residential</option>
+        <option>Silent zone - Hospital</option>
+        <option>Silent zone - School</option>
+        <option>Commercial</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="filterFrom">From</label>
+      <input id="filterFrom" type="date" />
+    </div>
+    <div class="field">
+      <label for="filterTo">To</label>
+      <input id="filterTo" type="date" />
+    </div>
+  </div>
+
+  <!-- Reports table — rows populated by dashboard.js -->
+  <section class="panel table-panel">
+    <table>
+      <thead>
+        <tr>
+          <th>Reference ID</th>
+          <th>Date/Time</th>
+          <th>Location</th>
+          <th>Violation Type</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="reportsTableBody"></tbody>
+    </table>
+    <p class="empty-state hidden" id="emptyReports">No reports match the selected filters.</p>
+  </section>
+</section>

@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Mumbai Police Noise Pollution Citizen Reporting Portal — Submit video evidence of noise violations with GPS location tracking." />
+    <title>Noise Pollution Citizen Reporting Portal</title>
+  </head>
+  <body>
+
+    <!--
+      ╔══════════════════════════════════════════════════╗
+      ║  HEADER — Always visible across all pages        ║
+      ║  Navigation uses data-page-target attributes     ║
+      ║  so main.js can switch pages via JavaScript.     ║
+      ╚══════════════════════════════════════════════════╝
+    -->
+    <header class="site-header">
+      <button class="brand-button" type="button" data-page-target="home" aria-label="Go to home">
+        <span class="brand-mark">MP</span>
+        <span>
+          <strong data-i18n="appName">Noise Pollution Reporting Portal</strong>
+          <small>Mumbai Police Citizen Service</small>
+        </span>
+      </button>
+
+      <div class="header-actions">
+        <nav class="main-nav" aria-label="Primary navigation">
+          <button class="nav-button active" type="button" data-page-target="home">Home</button>
+          <button class="nav-button" type="button" data-page-target="submit" data-i18n="submitReport">Submit Report</button>
+          <button class="nav-button" type="button" data-page-target="dashboard" data-i18n="dashboard">Authority Dashboard</button>
+          <button class="nav-button" type="button" data-page-target="stats" data-i18n="stats">Public Statistics</button>
+        </nav>
+        <button class="outline-button" id="languageToggle" type="button">Hindi</button>
+      </div>
+    </header>
+
+    <!--
+      ╔══════════════════════════════════════════════════╗
+      ║  MAIN — Page containers                          ║
+      ║  Each page is a <section> with a unique ID.      ║
+      ║  HTML content is loaded from src/pages/*.html     ║
+      ║  via Vite's ?raw imports in main.js.              ║
+      ╚══════════════════════════════════════════════════╝
+    -->
+    <main>
+      <!-- Page 1: Home / Hero -->
+      <section class="page active hero-section" id="homePage"></section>
+
+      <!-- Page 2: Submit Report -->
+      <section class="page content-section" id="submitPage"></section>
+
+      <!-- Page 3: Authority Dashboard -->
+      <section class="page content-section" id="dashboardPage"></section>
+
+      <!-- Page 4: Public Statistics -->
+      <section class="page content-section" id="statsPage"></section>
+    </main>
+
+    <!-- Report detail modal (filled by dashboard.js) -->
+    <div class="modal hidden" id="reportModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"></div>
+
+    <!-- Toast notification -->
+    <div class="toast hidden" id="toast" role="status" aria-live="polite"></div>
+
+    <!-- Entry point — loads main.js which imports all modules -->
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

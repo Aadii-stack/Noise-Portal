@@ -1,0 +1,84 @@
+/**
+ * ──────────────────────────────────────────────
+ *  base.css — Design tokens, reset, and global styles
+ * ──────────────────────────────────────────────
+ *
+ *  This file defines CSS custom properties (variables)
+ *  used across the entire app. Change these to adjust
+ *  the full colour theme.
+ *
+ *  Also includes: box-sizing reset, typography defaults,
+ *  button transitions, focus styles, and the .hidden utility.
+ */
+
+/* ── Design Tokens (colour palette + shadows) ── */
+:root {
+  --navy: #1e3a8a;
+  --deep-navy: #172554;
+  --light-blue: #dbeafe;
+  --sky-soft: #eff6ff;
+  --gold: #f59e0b;
+  --green: #16a34a;
+  --page-bg: #f4f7fb;
+  --card-bg: #ffffff;
+  --text: #0f172a;
+  --muted: #64748b;
+  --border: #d7e3f7;
+  --danger: #b91c1c;
+  --success: #166534;
+  --shadow: 0 18px 45px rgba(15, 23, 42, 0.1);
+  --soft-shadow: 0 8px 22px rgba(30, 58, 138, 0.08);
+}
+
+/* ── Reset ── */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  color: var(--text);
+  background:
+    linear-gradient(180deg, #ffffff 0, var(--page-bg) 420px),
+    var(--page-bg);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* ── Form element inheritance ── */
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+/* ── Button transitions ── */
+button {
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  button {
+    transition: none;
+  }
+}
+
+button:hover {
+  transform: translateY(-1px);
+}
+
+/* ── Focus ring ── */
+button:focus,
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 3px solid rgba(30, 58, 138, 0.25);
+  outline-offset: 2px;
+}
+
+/* ── Utility ── */
+.hidden {
+  display: none !important;
+}
