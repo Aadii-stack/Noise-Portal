@@ -64,9 +64,18 @@ const submissionLimiter = rateLimit({
 app.get('/api/health', (_req, res) => {
   res.json({ ok: true, service: 'noise-portal-api' });
 });
-app.use('/api/auth', authRoutes);
-app.use('/api/reports', submissionLimiter, reportRoutes);
-app.use('/api/upload', submissionLimiter, uploadRoutes);
+
+// Create a router for all API routes to handle prefixing flexibly
+const apiRouter = express.Router();
+
+apiRouter.use('/auth', authRoutes);
+apiRouter.use('/reports', submissionLimiter, reportRoutes);
+apiRouter.use('/upload', submissionLimiter, uploadRoutes);
+
+// Mount the router both at /api and at root /
+// This ensures that whether Vercel passes /api/reports or just /reports, it works.
+app.use('/api', apiRouter);
+app.use('/', apiRouter);
 
 app.use((err, _req, res, _next) => {
   const message = err.message || 'Server error';
