@@ -21,11 +21,11 @@ const allowedOrigins = new Set(
   [
     'http://127.0.0.1:5173',
     'http://localhost:5173',
+    'https://noise-portal-client.vercel.app',
     ...(process.env.CLIENT_ORIGIN || '')
       .split(',')
       .map((origin) => origin.trim())
-      .filter(Boolean),
-    process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : ''
+      .filter(Boolean)
   ].filter(Boolean)
 );
 
@@ -40,7 +40,20 @@ app.use(
 app.use(
   cors({
     origin(origin, callback) {
-      if (!origin || allowedOrigins.has(origin)) {
+      // Allow requests with no origin (like mobile apps or curl)
+      if (!origin) {
+        callback(null, true);
+        return;
+      }
+
+      // Check for exact matches
+      if (allowedOrigins.has(origin)) {
+        callback(null, true);
+        return;
+      }
+
+      // Allow Vercel preview deployments
+      if (origin.endsWith('.vercel.app')) {
         callback(null, true);
         return;
       }
